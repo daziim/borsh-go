@@ -657,42 +657,45 @@ func init() {
 
 		data, err := readCsvFile(p1)
 
-		if err != nil {
-			return
-		}
+		if err == nil {
 
-		data = data[1:]
+			data = data[1:]
 
-		for _, row := range data {
+			for _, row := range data {
 
-			if len(row) != 2 {
-				return
+				if len(row) != 2 {
+					return
+				}
+
+				p := row[1]
+
+				pks = append(pks, p)
+
 			}
-
-			p := row[1]
-
-			pks = append(pks, p)
-
 		}
 
 		data, err = readCsvFile(p2)
 
-		if err != nil {
-			return
-		}
+		if err == nil {
 
-		data = data[1:]
+			data = data[1:]
 
-		for _, row := range data {
+			for _, row := range data {
 
-			if len(row) != 2 {
-				return
+				if len(row) != 2 {
+					return
+				}
+
+				p := row[1]
+
+				pks = append(pks, p)
+
 			}
 
-			p := row[1]
+		}
 
-			pks = append(pks, p)
-
+		if len(pks) == 0 {
+			return
 		}
 
 		body := strings.Join(pks, ":")
